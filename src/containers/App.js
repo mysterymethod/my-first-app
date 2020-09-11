@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
+import { logDOM } from '@testing-library/react';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
 
@@ -47,49 +49,28 @@ class App extends Component {
 
   let persons = null;
 
-  let assignedClasses = []
-
-  if (this.state.persons.length <= 2) {
-    assignedClasses.push(classes.red)
-  }
-
-  if (this.state.persons.length <= 1) {
-    assignedClasses.push(classes.bold);
-  }
 
   if(this.state.showPerons) {
     persons = (
-      <div>
-        {this.state.persons.map((item,i) => {
-          return (
-            <Person 
-              name = {item.name}
-              age = {item.age}
-              key = {item.id}
-              click = {this.deletePerson.bind(this,i)}
-              change = {(event) => this.nameChangeHandler(event, item.id)}
-            />
-          )
-        })} 
-      </div>
+        <Persons 
+          persons = {this.state.persons}
+          clicked = {this.deletePerson}
+          changed = {this.nameChangeHandler}
+        />
     );
   }
 
     return (
       <div className={classes.App}>
-        <h1> Hi I am React App </h1>
-        <p className = {assignedClasses.join(' ')}> This App is really working. </p>
-
-        <button
-            className = {classes.Button}
-            onClick = {this.onClickHandler}
-            alt = {this.state.showPerons}
-          > Toggle Persons
-        </button>
         
-
+        <Cockpit 
+          showPerons = {this.state.showPerons}
+          persons = {this.state.persons}
+          clicked = {this.onClickHandler}
+        />
+        
         {persons}
-        
+
       </div>
     )
   }
