@@ -7,5 +7,19 @@
 }
 
 .bold {
-  font-weight: bolder;
+  font-weight: bold;
+}
+
+.Button {
+  background-color: green;
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.Button:hover {
+  background-color: lightgreen;
+  color: black;
 }

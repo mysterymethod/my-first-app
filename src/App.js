@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
-import styled from 'styled-components'
-// import './App.css';
+import classes from './App.css';
 import Person from './Person/Person';
-
-
-const StyleButton = styled.button `
-  background-color: ${props => props.alt ? 'red' : 'green'};
-  color: white;
-  font: inherit;
-  border: 1px solid blue;
-  padding: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-    color: black;
-  }
-`;
-
 
 class App extends Component {
 
@@ -35,7 +18,7 @@ class App extends Component {
     this.setState({showPerons: !doesShow})
   }
 
-
+  
   nameChangeHandler = ( event, id ) => {
 
     const personIndex = this.state.persons.findIndex(p => {
@@ -64,14 +47,14 @@ class App extends Component {
 
   let persons = null;
 
-  let classes = []
+  let assignedClasses = []
 
   if (this.state.persons.length <= 2) {
-    classes.push('red')
+    assignedClasses.push(classes.red)
   }
 
   if (this.state.persons.length <= 1) {
-    classes.push('bold');
+    assignedClasses.push(classes.bold);
   }
 
   if(this.state.showPerons) {
@@ -87,21 +70,22 @@ class App extends Component {
               change = {(event) => this.nameChangeHandler(event, item.id)}
             />
           )
-        })}
+        })} 
       </div>
     );
   }
 
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1> Hi I am React App </h1>
-        <p className = {classes.join(' ')}> This App is really working. </p>
+        <p className = {assignedClasses.join(' ')}> This App is really working. </p>
 
-        <StyleButton
+        <button
+            className = {classes.Button}
             onClick = {this.onClickHandler}
             alt = {this.state.showPerons}
           > Toggle Persons
-        </StyleButton>
+        </button>
         
 
         {persons}
