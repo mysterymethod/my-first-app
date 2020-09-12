@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components'
 // import './Person.css';
+import Aux from '../../../hoc/Auxiliary';
 
 
 const StyledDiv = styled.div `
@@ -18,22 +19,19 @@ const StyledDiv = styled.div `
 
 
 const person = (props) => {
-
+    console.log('[Person.js] rendering...');
     let assignedClasses = [];
-    
-
     return (
-        <StyledDiv> 
-            <div className = "Person">
-                <p onClick = {props.click} > I am {props.name} and I am {props.age} years old. </p>
-                <p> {props.children} </p>
-                <input 
-                    type = "text" 
-                    onChange = {props.change}
-                    value = {props.name}
-                />
-            </div>
-        </StyledDiv>
+        <Fragment>
+            <p key = 'i1' onClick = {props.click} > I am {props.name} and I am {props.age} years old. </p>
+            <p key = 'i2'> {props.children} </p>
+            <input 
+                key = 'i3'
+                type = "text" 
+                onChange = {props.change}
+                value = {props.name}
+            /> 
+        </Fragment>
     )
 }
 

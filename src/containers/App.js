@@ -3,8 +3,13 @@ import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import { logDOM } from '@testing-library/react';
 import Cockpit from '../components/Cockpit/Cockpit';
-
+   
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    console.log('[App.js] constructor');
+  }
 
   state = {
     persons: [
@@ -12,15 +17,25 @@ class App extends Component {
       { id: 2, name: "Manu", age: 40 },
       { id: 3, name: "Seema", age: 18 }
     ],
-    showPerons: false
+    showPerons: false,
+    showCockpit: true
   }
 
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    //Return Updated State
+    return state;
+  }
+      
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
+  
   onClickHandler = () => {
     const doesShow = this.state.showPerons;
     this.setState({showPerons: !doesShow})
   }
 
-  
   nameChangeHandler = ( event, id ) => {
 
     const personIndex = this.state.persons.findIndex(p => {
@@ -44,11 +59,12 @@ class App extends Component {
     persons.splice(index,1);
     this.setState({persons: persons});
   }
-
+   
   render() {
 
-  let persons = null;
+  console.log('[App.js] render');
 
+  let persons = null;
 
   if(this.state.showPerons) {
     persons = (
@@ -63,12 +79,15 @@ class App extends Component {
     return (
       <div className={classes.App}>
         
-        <Cockpit 
+        <button onClick = {() => { this.setState({ showCockpit: false })}}> Remove Cockpit </button>
+
+        { this.state.showCockpit && <Cockpit 
+          title = {this.props.appTitle}
           showPerons = {this.state.showPerons}
           persons = {this.state.persons}
           clicked = {this.onClickHandler}
-        />
-        
+        /> }
+            
         {persons}
 
       </div>
