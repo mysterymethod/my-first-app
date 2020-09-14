@@ -109,15 +109,14 @@ class App extends Component {
           showPerons = {this.state.showPerons}
           persons = {this.state.persons}
           clicked = {this.onClickHandler}
-          
-
+            
         /> }
             
         {persons}
        </AuthContext.Provider>
       </WithClass>
-    )
-  }
+    ) 
+  }  
 }
     
 export default App;
