@@ -4,6 +4,7 @@ import Persons from '../components/Persons/Persons';
 import { logDOM } from '@testing-library/react';
 import Cockpit from '../components/Cockpit/Cockpit';
 import WithClass from '../hoc/WithClass';
+import AuthContext from '../context/auth-context';
    
 class App extends Component {
 
@@ -19,7 +20,9 @@ class App extends Component {
       { id: 3, name: "Seema", age: 18 }
     ],
     showPerons: false,
-    showCockpit: true
+    showCockpit: true,
+    changeCounter: 0,
+    authenticated: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -52,14 +55,25 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState( {persons: persons} );
-  }
+    this.setState((prevState, props) => {
+      return {
+        persons: persons, 
+        changeCounter: prevState.changeCounter + 1
+      };
+    });
+  };
 
   deletePerson = (index) => {
     const persons = [...this.state.persons];
     persons.splice(index,1);
     this.setState({persons: persons});
   }
+
+
+
+  loginHandler = () => {
+    this.setState({authenticated: true});
+  };
    
   render() {
 
@@ -73,29 +87,39 @@ class App extends Component {
           persons = {this.state.persons}
           clicked = {this.deletePerson}
           changed = {this.nameChangeHandler}
+          isAuthenticated = {this.state.authenticated}
         />
     );
   }
 
-    return (
+    return ( 
       <WithClass classes={classes.App}>
         
         <button onClick = {() => { this.setState({ showCockpit: false })}}> Remove Cockpit </button>
 
+        <AuthContext.Provider 
+          value = {{
+            authenticated: this.state.authenticated,
+            login: this.loginHandler
+          }} 
+        >
+        
         { this.state.showCockpit && <Cockpit 
           title = {this.props.appTitle}
           showPerons = {this.state.showPerons}
           persons = {this.state.persons}
           clicked = {this.onClickHandler}
+          
+
         /> }
             
         {persons}
-
+       </AuthContext.Provider>
       </WithClass>
     )
   }
 }
     
 export default App;
-
-
+ 
+ 

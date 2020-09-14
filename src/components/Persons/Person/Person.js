@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+
 import styled from 'styled-components'
 // import './Person.css';
 import Aux from '../../../hoc/Auxiliary';
+import AuthContext from '../../../context/auth-context';
+
 
 
 const StyledDiv = styled.div `
@@ -16,23 +20,36 @@ const StyledDiv = styled.div `
         width: '450px'
     }
 `; 
-
+ 
 
 const person = (props) => {
     console.log('[Person.js] rendering...');
     let assignedClasses = [];
     return (
         <Fragment>
-            <p key = 'i1' onClick = {props.click} > I am {props.name} and I am {props.age} years old. </p>
-            <p key = 'i2'> {props.children} </p>
-            <input 
-                key = 'i3'
-                type = "text" 
-                onChange = {props.change}
-                value = {props.name}
-            /> 
+            <AuthContext.Consumer>
+                {(context) => 
+                    context.authenticated ? <p> Authenticated </p> : <p> Please Login </p>}
+            </AuthContext.Consumer>
+            
+                <p key = 'i1' onClick = {props.click} > I am {props.name} and I am {props.age} years old. </p>
+                <p key = 'i2'> {props.children} </p>
+                <input 
+                    key = 'i3'
+                    type = "text" 
+                    onChange = {props.change}
+                    value = {props.name}
+                /> 
         </Fragment>
     )
 }
+
+person.PropTypes = {
+    click: PropTypes.func,
+    name: PropTypes.string,
+    age: PropTypes.number,
+    change: PropTypes.func
+};
+
 
 export default person;
