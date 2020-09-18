@@ -1,124 +1,72 @@
-import React, { Component } from 'react';
-import classes from './App.css';
+import React, { Component } from 'react'; 
+
 import Persons from '../components/Persons/Persons';
-import { logDOM } from '@testing-library/react';
 import Cockpit from '../components/Cockpit/Cockpit';
-import WithClass from '../hoc/WithClass';
-import AuthContext from '../context/auth-context';
-   
+
+
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    console.log('[App.js] constructor');
-  }
-
-  state = {
-    persons: [
-      { id: 1, name: "Max", age: 30 },
-      { id: 2, name: "Manu", age: 40 },
-      { id: 3, name: "Seema", age: 18 }
-    ],
-    showPerons: false,
-    showCockpit: true,
-    changeCounter: 0,
-    authenticated: false
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    console.log('[App.js] getDerivedStateFromProps', props);
-    //Return Updated State
-    return state;
-  }
-      
-  componentDidMount() {
-    console.log('[App.js] componentDidMount');
-  }
-  
-  onClickHandler = () => {
-    const doesShow = this.state.showPerons;
-    this.setState({showPerons: !doesShow})
-  }
-
-  nameChangeHandler = ( event, id ) => {
-
-    const personIndex = this.state.persons.findIndex(p => {
-      return p.id === id;
-    });
-
-    const person = {
-      ...this.state.persons[personIndex]
+    state = {
+        persons: [
+            {id: 1, name: 'Pranoy', age: 20},
+            {id: 2, name: 'David', age: 99},
+            {id: 3, name: 'Raquel', age: 0}
+        ],
+        showPersons: false
     };
 
-    person.name = event.target.value;
+    clickHandler = () => {
+        const showPerson = this.state.showPersons;
+        this.setState({showPersons: !showPerson});
+    }
 
-    const persons = [...this.state.persons];
-    persons[personIndex] = person;
+    deletePerson = (index) => {
+        let persons = [...this.state.persons];
+        persons.splice(index,1);
+        this.setState({persons: persons});
+    }
 
-    this.setState((prevState, props) => {
-      return {
-        persons: persons, 
-        changeCounter: prevState.changeCounter + 1
-      };
-    });
-  };
+    nameChangeHandler = (event, id) => {
+        const index = this.state.persons.findIndex(item => {
+            return item.id == id;
+        });
 
-  deletePerson = (index) => {
-    const persons = [...this.state.persons];
-    persons.splice(index,1);
-    this.setState({persons: persons});
-  }
+        let newName = event.target.value;
 
-
-
-  loginHandler = () => {
-    this.setState({authenticated: true});
-  };
-   
-  render() {
-
-  console.log('[App.js] render');
-
-  let persons = null;
-
-  if(this.state.showPerons) {
-    persons = (
-        <Persons 
-          persons = {this.state.persons}
-          clicked = {this.deletePerson}
-          changed = {this.nameChangeHandler}
-          isAuthenticated = {this.state.authenticated}
-        />
-    );
-  }
-
-    return ( 
-      <WithClass classes={classes.App}>
+        let persons = [...this.state.persons];
+        persons[index].name = newName;
         
-        <button onClick = {() => { this.setState({ showCockpit: false })}}> Remove Cockpit </button>
+        this.setState({persons: persons})
 
-        <AuthContext.Provider 
-          value = {{
-            authenticated: this.state.authenticated,
-            login: this.loginHandler
-          }} 
-        >
-        
-        { this.state.showCockpit && <Cockpit 
-          title = {this.props.appTitle}
-          showPerons = {this.state.showPerons}
-          persons = {this.state.persons}
-          clicked = {this.onClickHandler}
+    }
+
+    render() {
+
+        let persons = null;
+
+        if (this.state.showPersons) {
+            persons = (
+                <div>
+                    <Persons 
+                        persons={this.state.persons}
+                        clicked={this.deletePerson}
+                        nameChange={this.nameChangeHandler}
+                    />
+                </div>
+            )
+        }
+
+        return (
+            <div>
+                <Cockpit 
+                    clicked={this.clickHandler}
+                />
+
+                {persons}
+            </div>
             
-        /> }
-            
-        {persons}
-       </AuthContext.Provider>
-      </WithClass>
-    ) 
-  }  
+        );
+    }
 }
-    
+
 export default App;
- 
- 
